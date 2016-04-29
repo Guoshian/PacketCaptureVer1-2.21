@@ -1,0 +1,81 @@
+apply plugin: 'com.android.model.application'
+
+model {
+    android {
+        compileSdkVersion = 23 // "android-N"
+        buildToolsVersion = "23.0.3" // "24.0.0 rc2"
+
+        defaultConfig {
+            applicationId = "eu.faircode.netguard"
+            minSdkVersion.apiLevel = 14
+            targetSdkVersion.apiLevel = 23 // 24
+            versionCode = 2016042701
+            versionName = "2.21"
+            archivesBaseName = "NetGuard-v$versionName-$versionCode-sdk-$targetSdkVersion.apiLevel"
+
+            buildConfigFields {
+                create() {
+                    type "int"
+                    name "VALUE"
+                    value "1"
+                }
+            }
+        }
+
+        compileOptions.with {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+
+        ndk {
+            platformVersion = "14"
+            moduleName = "netguard"
+            toolchain = "clang"
+            ldLibs.add("log")
+        }
+
+        sources {
+            main {
+                jni {
+                    source {
+                        srcDirs.removeAll()
+                        srcDirs.add('src/main/jni/netguard')
+                    }
+                    exportedHeaders {
+                    }
+                }
+            }
+        }
+
+        buildTypes {
+            release {
+                minifyEnabled = true
+                useProguard = true
+                proguardFiles.add(file('proguard-rules.pro'))
+                ndk.with {
+                    debuggable = false
+                }
+            }
+            debug {
+                minifyEnabled = true
+                useProguard = true
+                proguardFiles.add(file('proguard-rules.pro'))
+                ndk.with {
+                    debuggable = false
+                }
+            }
+        }
+
+        productFlavors {
+            create("all") {
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:23.2.+'
+    compile 'com.android.support:recyclerview-v7:23.2.+'
+    compile 'com.squareup.picasso:picasso:2.5.+'
+}
