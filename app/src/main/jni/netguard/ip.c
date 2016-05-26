@@ -20,11 +20,12 @@
 #include "netguard.h"
 
 int max_tun_msg = 0;
+int counter = 0;
 extern int loglevel;
 extern FILE *pcap_file;
 
 uint16_t get_mtu() {
-    return 10000;
+    return 32767;
 }
 
 uint16_t get_default_mss(int version) {
@@ -37,6 +38,10 @@ uint16_t get_default_mss(int version) {
 int check_tun(const struct arguments *args, int *ready,
               fd_set *rfds, fd_set *wfds, fd_set *efds,
               int sessions, int maxsessions) {
+
+    counter = counter+1;
+    log_android(ANDROID_LOG_ERROR, "counter: %d", counter);
+
     // Check tun error
     if (FD_ISSET(args->tun, efds)) {
         (*ready)--;
@@ -53,6 +58,8 @@ int check_tun(const struct arguments *args, int *ready,
 
     // Check tun read
     if (FD_ISSET(args->tun, rfds)) {
+
+
         (*ready)--;
         uint8_t *buffer = malloc(get_mtu());
         ssize_t length = read(args->tun, buffer, get_mtu());
