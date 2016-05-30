@@ -39,13 +39,12 @@ int check_tun(const struct arguments *args, int *ready,
               fd_set *rfds, fd_set *wfds, fd_set *efds,
               int sessions, int maxsessions) {
 
-    counter = counter+1;
-    log_android(ANDROID_LOG_ERROR, "counter: %d", counter);
+
 
     // Check tun error
     if (FD_ISSET(args->tun, efds)) {
         (*ready)--;
-        log_android(ANDROID_LOG_ERROR, "tun %d exception", args->tun);
+        log_android(ANDROID_LOG_INFO, "tun %d exception", args->tun);
         if (fcntl(args->tun, F_GETFL) < 0) {
             log_android(ANDROID_LOG_ERROR, "fcntl tun %d F_GETFL error %d: %s",
                         args->tun, errno, strerror(errno));
@@ -59,6 +58,8 @@ int check_tun(const struct arguments *args, int *ready,
     // Check tun read
     if (FD_ISSET(args->tun, rfds)) {
 
+        log_android(ANDROID_LOG_INFO, "counter2: %d", counter);
+        counter++;
 
         (*ready)--;
         uint8_t *buffer = malloc(get_mtu());
@@ -79,8 +80,11 @@ int check_tun(const struct arguments *args, int *ready,
         }
         else if (length > 0) {
             // Write pcap record
-            if (pcap_file != NULL)
+
+            if (pcap_file != NULL) {
                 write_pcap_rec(buffer, (size_t) length);
+
+            }
 
             if (length > max_tun_msg) {
                 max_tun_msg = length;
@@ -390,9 +394,10 @@ jint get_uid_retry(const int version, const int protocol,
         }
     }
 
-    if (uid < 0)
-        log_android(ANDROID_LOG_ERROR, "uid v%d p%d %s/%u not found",
-                    version, protocol, source, sport);
+    if (uid < 0){
+        log_android(ANDROID_LOG_ERROR, "uid v%d p%d %s/%u not found %d ",
+                    version, protocol, source, sport ,counter);
+       }
 
     return uid;
 }

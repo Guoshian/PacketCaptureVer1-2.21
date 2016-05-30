@@ -47,6 +47,11 @@ void *handle_events(void *a) {
     struct arguments *args = (struct arguments *) a;
     log_android(ANDROID_LOG_WARN, "Start events tun=%d thread %x", args->tun, thread_id);
 
+    int counter =0;
+
+
+
+
     // Attach to Java
     JNIEnv *env;
     jint rs = (*jvm)->AttachCurrentThread(jvm, &env, NULL);
@@ -182,6 +187,11 @@ void *handle_events(void *a) {
             if (check_tun(args, &ready, &rfds, &wfds, &efds, sessions, maxsessions) < 0)
                 error = 1;
             else {
+
+
+                log_android(ANDROID_LOG_INFO, "counter1: %d", counter);
+                counter++;
+
 #ifdef PROFILE_EVENTS
                 gettimeofday(&end, NULL);
                 mselapsed = (end.tv_sec - start.tv_sec) * 1000.0 +
