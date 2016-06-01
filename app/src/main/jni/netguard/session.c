@@ -104,9 +104,9 @@ void *handle_events(void *a) {
         int sessions = isessions + usessions + tsessions;
 
         // Check sessions
-        check_icmp_sessions(args, sessions, maxsessions);
+        //check_icmp_sessions(args, sessions, maxsessions);
         check_udp_sessions(args, sessions, maxsessions);
-        check_tcp_sessions(args, sessions, maxsessions);
+        //check_tcp_sessions(args, sessions, maxsessions);
 
         // https://bugzilla.mozilla.org/show_bug.cgi?id=1093893
         int idle = (tsessions + usessions + tsessions == 0 && sdk >= 16);
@@ -196,21 +196,27 @@ void *handle_events(void *a) {
                 gettimeofday(&end, NULL);
                 mselapsed = (end.tv_sec - start.tv_sec) * 1000.0 +
                             (end.tv_usec - start.tv_usec) / 1000.0;
+
+                log_android(ANDROID_LOG_INFO, "tun %f", mselapsed);
+
                 if (mselapsed > PROFILE_EVENTS)
                     log_android(ANDROID_LOG_WARN, "tun %f", mselapsed);
 
                 gettimeofday(&start, NULL);
 #endif
 
+
+
                 // Check ICMP downstream
-                check_icmp_sockets(args, &ready, &rfds, &wfds, &efds);
+                //check_icmp_sockets(args, &ready, &rfds, &wfds, &efds);
 
                 // Check UDP downstream
-                check_udp_sockets(args, &ready, &rfds, &wfds, &efds);
+               // check_udp_sockets(args, &ready, &rfds, &wfds, &efds);
 
                 // Check TCP downstream
-                check_tcp_sockets(args, &ready, &rfds, &wfds, &efds);
+                //check_tcp_sockets(args, &ready, &rfds, &wfds, &efds);
             }
+
 
             if (ready > 0)
                 log_android(ANDROID_LOG_ERROR, "Ready %d", ready);

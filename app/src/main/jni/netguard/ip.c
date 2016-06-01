@@ -40,7 +40,7 @@ int check_tun(const struct arguments *args, int *ready,
               int sessions, int maxsessions) {
 
 
-
+/*
     // Check tun error
     if (FD_ISSET(args->tun, efds)) {
         (*ready)--;
@@ -54,7 +54,7 @@ int check_tun(const struct arguments *args, int *ready,
             report_exit(args, "tun %d exception", args->tun);
         return -1;
     }
-
+*/
     // Check tun read
     if (FD_ISSET(args->tun, rfds)) {
 
@@ -85,12 +85,12 @@ int check_tun(const struct arguments *args, int *ready,
                 write_pcap_rec(buffer, (size_t) length);
 
             }
-
+/*
             if (length > max_tun_msg) {
                 max_tun_msg = length;
                 log_android(ANDROID_LOG_WARN, "Maximum tun msg length %d", max_tun_msg);
             }
-
+*/
             // Handle IP from tun
             handle_ip(args, buffer, (size_t) length, sessions, maxsessions);
 
