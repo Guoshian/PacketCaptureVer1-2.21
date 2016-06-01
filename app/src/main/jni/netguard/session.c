@@ -114,19 +114,19 @@ void *handle_events(void *a) {
                     isessions, usessions, tsessions, sessions, maxsessions, idle, sdk);
 
         // Next event time
-        ts.tv_sec = (sdk < 16 ? 5 : get_select_timeout(sessions, maxsessions));
+       /* ts.tv_sec = (sdk < 16 ? 5 : get_select_timeout(sessions, maxsessions));
         ts.tv_nsec = 0;
-        sigemptyset(&emptyset);
+        sigemptyset(&emptyset);*/
 
         // Check if tun is writable
-        FD_ZERO(&rfds);
+        /*FD_ZERO(&rfds);
         FD_ZERO(&wfds);
         FD_ZERO(&efds);
         FD_SET(args->tun, &wfds);
         if (pselect(args->tun + 1, &rfds, &wfds, &efds, &ts, &emptyset) == 0) {
             log_android(ANDROID_LOG_WARN, "tun not writable");
             continue;
-        }
+        }*/
 
         // Select
         int max = get_selects(args, &rfds, &wfds, &efds);
@@ -303,7 +303,7 @@ int get_selects(const struct arguments *args, fd_set *rfds, fd_set *wfds, fd_set
     int max = args->tun;
 
     // Select ICMP sockets
-    struct icmp_session *i = icmp_session;
+   /* struct icmp_session *i = icmp_session;
     while (i != NULL) {
         if (!i->stop) {
             if (fstat(i->socket, &sb) < 0) {
@@ -318,7 +318,7 @@ int get_selects(const struct arguments *args, fd_set *rfds, fd_set *wfds, fd_set
             }
         }
         i = i->next;
-    }
+    }*/
 
     // Select UDP sockets
     struct udp_session *u = udp_session;
@@ -340,7 +340,7 @@ int get_selects(const struct arguments *args, fd_set *rfds, fd_set *wfds, fd_set
     }
 
     // Select TCP sockets
-    struct tcp_session *t = tcp_session;
+   /* struct tcp_session *t = tcp_session;
     while (t != NULL) {
         // Select sockets
         if (t->socket >= 0) {
@@ -380,7 +380,7 @@ int get_selects(const struct arguments *args, fd_set *rfds, fd_set *wfds, fd_set
 
         t = t->next;
     }
-
+*/
     return max;
 }
 
@@ -388,7 +388,7 @@ void check_allowed(const struct arguments *args) {
     char source[INET6_ADDRSTRLEN + 1];
     char dest[INET6_ADDRSTRLEN + 1];
 
-    struct icmp_session *i = icmp_session;
+   /* struct icmp_session *i = icmp_session;
     while (i != NULL) {
         if (!i->stop) {
             if (i->version == 4) {
@@ -409,7 +409,7 @@ void check_allowed(const struct arguments *args) {
             }
         }
         i = i->next;
-    }
+    }*/
 
     struct udp_session *l = NULL;
     struct udp_session *u = udp_session;
@@ -450,7 +450,7 @@ void check_allowed(const struct arguments *args) {
         u = u->next;
     }
 
-    struct tcp_session *t = tcp_session;
+   /* struct tcp_session *t = tcp_session;
     while (t != NULL) {
         if (t->state != TCP_CLOSING && t->state != TCP_CLOSE) {
             if (t->version == 4) {
@@ -472,6 +472,6 @@ void check_allowed(const struct arguments *args) {
             }
         }
         t = t->next;
-    }
+    }*/
 }
 
