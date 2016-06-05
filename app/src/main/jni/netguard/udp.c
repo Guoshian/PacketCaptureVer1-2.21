@@ -71,10 +71,10 @@ void check_udp_sessions(const struct arguments *args, int sessions, int maxsessi
             inet_ntop(AF_INET, &u->saddr.ip4, source, sizeof(source));
             inet_ntop(AF_INET, &u->daddr.ip4, dest, sizeof(dest));
         }
-       /* else {
+        else {
             inet_ntop(AF_INET6, &u->saddr.ip6, source, sizeof(source));
             inet_ntop(AF_INET6, &u->daddr.ip6, dest, sizeof(dest));
-        }*/
+        }
 
         // Check session timeout
         int timeout = get_udp_timeout(u, sessions, maxsessions);
@@ -182,17 +182,17 @@ void check_udp_sockets(const struct arguments *args, int *ready,
                         cur->received += bytes;
 
                         // Process DNS response
-                        /*if (ntohs(cur->dest) == 53)
-                            parse_dns_response(args, buffer, (size_t) bytes);*/
+                        if (ntohs(cur->dest) == 53)
+                            parse_dns_response(args, buffer, (size_t) bytes);
 
                         // Forward to tun
-                       /* if (write_udp(args, cur, buffer, (size_t) bytes) < 0)
+                        if (write_udp(args, cur, buffer, (size_t) bytes) < 0)
                             cur->state = UDP_FINISHING;
                         else {
                             // Prevent too many open files
                             if (ntohs(cur->dest) == 53)
                                 cur->state = UDP_FINISHING;
-                        }*/
+                        }
                     }
                     free(buffer);
                 }
@@ -309,10 +309,10 @@ jboolean handle_udp(const struct arguments *args,
     if (version == 4) {
         inet_ntop(AF_INET, &ip4->saddr, source, sizeof(source));
         inet_ntop(AF_INET, &ip4->daddr, dest, sizeof(dest));
-    } /*else {
+    } else {
         inet_ntop(AF_INET6, &ip6->ip6_src, source, sizeof(source));
         inet_ntop(AF_INET6, &ip6->ip6_dst, dest, sizeof(dest));
-    }*/
+    }
 
     if (cur != NULL && cur->state != UDP_ACTIVE) {
         log_android(ANDROID_LOG_INFO, "UDP ignore session from %s/%u to %s/%u state %d",
@@ -344,10 +344,10 @@ jboolean handle_udp(const struct arguments *args,
         if (version == 4) {
             u->saddr.ip4 = (__be32) ip4->saddr;
             u->daddr.ip4 = (__be32) ip4->daddr;
-        } /*else {
+        } else {
             memcpy(&u->saddr.ip6, &ip6->ip6_src, 16);
             memcpy(&u->daddr.ip6, &ip6->ip6_dst, 16);
-        }*/
+        }
 
         u->source = udphdr->source;
         u->dest = udphdr->dest;
@@ -370,7 +370,7 @@ jboolean handle_udp(const struct arguments *args,
     }
 
     // Check for DNS
-    /*if (ntohs(udphdr->dest) == 53) {
+    if (ntohs(udphdr->dest) == 53) {
         char qname[DNS_QNAME_MAX + 1];
         uint16_t qtype;
         uint16_t qclass;
@@ -394,13 +394,13 @@ jboolean handle_udp(const struct arguments *args,
                 return 0;
             }
         }
-    }*/
+    }
 
     // Check for DHCP (tethering)
-  /*  if (ntohs(udphdr->source) == 68 || ntohs(udphdr->dest) == 67) {
+    if (ntohs(udphdr->source) == 68 || ntohs(udphdr->dest) == 67) {
         if (check_dhcp(args, cur, data, datalen) >= 0)
             return 1;
-    }*/
+    }
 
     log_android(ANDROID_LOG_INFO, "UDP forward from tun %s/%u to %s/%u data %d",
                 source, ntohs(udphdr->source), dest, ntohs(udphdr->dest), datalen);
@@ -416,11 +416,11 @@ jboolean handle_udp(const struct arguments *args,
             addr4.sin_family = AF_INET;
             addr4.sin_addr.s_addr = (__be32) cur->daddr.ip4;
             addr4.sin_port = cur->dest;
-        } /*else {
+        } else {
             addr6.sin6_family = AF_INET6;
             memcpy(&addr6.sin6_addr, &cur->daddr.ip6, 16);
             addr6.sin6_port = cur->dest;
-        }*/
+        }
     } else {
         rversion = (strstr(redirect->raddr, ":") == NULL ? 4 : 6);
         log_android(ANDROID_LOG_WARN, "UDP%d redirect to %s/%u",
@@ -431,11 +431,11 @@ jboolean handle_udp(const struct arguments *args,
             inet_pton(AF_INET, redirect->raddr, &addr4.sin_addr);
             addr4.sin_port = htons(redirect->rport);
         }
-        /*else {
+        else {
             addr6.sin6_family = AF_INET6;
             inet_pton(AF_INET6, redirect->raddr, &addr6.sin6_addr);
             addr6.sin6_port = htons(redirect->rport);
-        }*/
+        }
     }
 
     if (sendto(cur->socket, data, (socklen_t) datalen, MSG_NOSIGNAL,
@@ -474,7 +474,7 @@ int open_udp_socket(const struct arguments *args,
         return -1;
 
     // Check for broadcast/multicast
-    /*if (cur->version == 4) {
+    if (cur->version == 4) {
         uint32_t broadcast4 = INADDR_BROADCAST;
         if (memcmp(&cur->daddr.ip4, &broadcast4, sizeof(broadcast4)) == 0) {
             log_android(ANDROID_LOG_WARN, "UDP4 broadcast");
@@ -508,7 +508,7 @@ int open_udp_socket(const struct arguments *args,
                             "UDP setsockopt IPV6_ADD_MEMBERSHIP error %d: %s",
                             errno, strerror(errno));
         }
-    }*/
+    }
 
     return sock;
 }

@@ -20,31 +20,27 @@
 #include "netguard.h"
 
 int max_tun_msg = 0;
-int counter = 0;
 extern int loglevel;
 extern FILE *pcap_file;
 
 uint16_t get_mtu() {
-    return 65535;
+    return 10000;
 }
 
 uint16_t get_default_mss(int version) {
     if (version == 4)
         return (uint16_t) (get_mtu() - sizeof(struct iphdr) - sizeof(struct tcphdr));
-    /*else
-        return (uint16_t) (get_mtu() - sizeof(struct ip6_hdr) - sizeof(struct tcphdr));*/
+    else
+        return (uint16_t) (get_mtu() - sizeof(struct ip6_hdr) - sizeof(struct tcphdr));
 }
 
 int check_tun(const struct arguments *args, int *ready,
               fd_set *rfds, fd_set *wfds, fd_set *efds,
               int sessions, int maxsessions) {
-
-
-/*
     // Check tun error
     if (FD_ISSET(args->tun, efds)) {
         (*ready)--;
-        log_android(ANDROID_LOG_INFO, "tun %d exception", args->tun);
+        log_android(ANDROID_LOG_ERROR, "tun %d exception", args->tun);
         if (fcntl(args->tun, F_GETFL) < 0) {
             log_android(ANDROID_LOG_ERROR, "fcntl tun %d F_GETFL error %d: %s",
                         args->tun, errno, strerror(errno));
@@ -54,13 +50,9 @@ int check_tun(const struct arguments *args, int *ready,
             report_exit(args, "tun %d exception", args->tun);
         return -1;
     }
-*/
+
     // Check tun read
     if (FD_ISSET(args->tun, rfds)) {
-
-        log_android(ANDROID_LOG_INFO, "counter2: %d", counter);
-        counter++;
-
         (*ready)--;
         uint8_t *buffer = malloc(get_mtu());
         ssize_t length = read(args->tun, buffer, get_mtu());
@@ -80,17 +72,14 @@ int check_tun(const struct arguments *args, int *ready,
         }
         else if (length > 0) {
             // Write pcap record
-
-            if (pcap_file != NULL) {
+            if (pcap_file != NULL)
                 write_pcap_rec(buffer, (size_t) length);
 
-            }
-/*
             if (length > max_tun_msg) {
                 max_tun_msg = length;
                 log_android(ANDROID_LOG_WARN, "Maximum tun msg length %d", max_tun_msg);
             }
-*/
+
             // Handle IP from tun
             handle_ip(args, buffer, (size_t) length, sessions, maxsessions);
 
@@ -184,7 +173,6 @@ void handle_ip(const struct arguments *args,
             }
         }
     }
-        /*
     else if (version == 6) {
         if (length < sizeof(struct ip6_hdr)) {
             log_android(ANDROID_LOG_WARN, "IP6 packet too short length %d", length);
@@ -220,7 +208,7 @@ void handle_ip(const struct arguments *args,
         payload = (uint8_t *) (pkt + sizeof(struct ip6_hdr) + off);
 
         // TODO checksum
-    }*/
+    }
     else {
         log_android(ANDROID_LOG_ERROR, "Unknown version %d", version);
         return;
@@ -233,19 +221,19 @@ void handle_ip(const struct arguments *args,
     int syn = 0;
     uint16_t sport = 0;
     uint16_t dport = 0;
-    /*if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6) {
+    if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6) {
         if (length - (payload - pkt) < sizeof(struct icmp)) {
             log_android(ANDROID_LOG_WARN, "ICMP packet too short");
             return;
         }
 
-       // struct icmp *icmp = (struct icmp *) payload;
+        struct icmp *icmp = (struct icmp *) payload;
 
         // http://lwn.net/Articles/443051/
-       // sport = ntohs(icmp->icmp_id);
-       // dport = ntohs(icmp->icmp_id);
+        sport = ntohs(icmp->icmp_id);
+        dport = ntohs(icmp->icmp_id);
 
-    } else*/ if (protocol == IPPROTO_UDP) {
+    } else if (protocol == IPPROTO_UDP) {
         if (length - (payload - pkt) < sizeof(struct udphdr)) {
             log_android(ANDROID_LOG_WARN, "UDP packet too short");
             return;
@@ -258,7 +246,7 @@ void handle_ip(const struct arguments *args,
 
         // TODO checksum (IPv6)
     }
-    /*else if (protocol == IPPROTO_TCP) {
+    else if (protocol == IPPROTO_TCP) {
         if (length - (payload - pkt) < sizeof(struct tcphdr)) {
             log_android(ANDROID_LOG_WARN, "TCP packet too short");
             return;
@@ -286,14 +274,14 @@ void handle_ip(const struct arguments *args,
             report_error(args, 3, "TCP out of band data");
 
         // TODO checksum
-    }*/
-   /* else if (protocol != IPPROTO_HOPOPTS && protocol != IPPROTO_IGMP && protocol != IPPROTO_ESP)
-        report_error(args, 1, "Unknown protocol %d", protocol);*/
+    }
+    else if (protocol != IPPROTO_HOPOPTS && protocol != IPPROTO_IGMP && protocol != IPPROTO_ESP)
+        report_error(args, 1, "Unknown protocol %d", protocol);
 
     flags[flen] = 0;
 
     // Limit number of sessions
-   /* if (sessions >= maxsessions) {
+    if (sessions >= maxsessions) {
         if ((protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6) ||
             (protocol == IPPROTO_UDP && !has_udp_session(args, pkt, payload)) ||
             (protocol == IPPROTO_TCP && syn)) {
@@ -302,7 +290,7 @@ void handle_ip(const struct arguments *args,
                         sessions, maxsessions, protocol, version);
             return;
         }
-    }*/
+    }
 
     // Get uid
     jint uid = -1;
@@ -328,25 +316,25 @@ void handle_ip(const struct arguments *args,
     struct allowed *redirect = NULL;
     if (protocol == IPPROTO_UDP && has_udp_session(args, pkt, payload))
         allowed = 1; // could be a lingering/blocked session
-    /*else if (protocol == IPPROTO_TCP && !syn)
-        allowed = 1; // assume existing session*/
-   /* else {
+    else if (protocol == IPPROTO_TCP && !syn)
+        allowed = 1; // assume existing session
+    else {
         jobject objPacket = create_packet(
                 args, version, protocol, flags, source, sport, dest, dport, "", uid, 0);
         redirect = is_address_allowed(args, objPacket);
         allowed = (redirect != NULL);
         if (redirect != NULL && (*redirect->raddr == 0 || redirect->rport == 0))
             redirect = NULL;
-    }*/
+    }
 
     // Handle allowed traffic
     if (allowed) {
-        /*if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6)
+        if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6)
             handle_icmp(args, pkt, length, payload, uid);
-        else */if (protocol == IPPROTO_UDP)
+        else if (protocol == IPPROTO_UDP)
             handle_udp(args, pkt, length, payload, uid, redirect);
-       /* else if (protocol == IPPROTO_TCP)
-            handle_tcp(args, pkt, length, payload, uid, redirect);*/
+        else if (protocol == IPPROTO_TCP)
+            handle_tcp(args, pkt, length, payload, uid, redirect);
     }
     else {
         if (protocol == IPPROTO_UDP)
@@ -391,14 +379,13 @@ jint get_uid_retry(const int version, const int protocol,
         if (uid < 0 && tries < UID_MAXTRY) {
             log_android(ANDROID_LOG_WARN, "get uid v%d p%d %s/%u try %d",
                         version, protocol, source, sport, tries);
-            usleep(1* UID_DELAYTRY);
+            usleep(1000 * UID_DELAYTRY);
         }
     }
 
-    if (uid < 0){
-        log_android(ANDROID_LOG_ERROR, "uid v%d p%d %s/%u not found %d ",
-                    version, protocol, source, sport ,counter);
-       }
+    if (uid < 0)
+        log_android(ANDROID_LOG_ERROR, "uid v%d p%d %s/%u not found",
+                    version, protocol, source, sport);
 
     return uid;
 }
@@ -424,13 +411,13 @@ jint get_uid(const int version, const int protocol,
 
     // Get proc file name
     char *fn = NULL;
-    /*if (protocol == IPPROTO_ICMP && version == 4)
+    if (protocol == IPPROTO_ICMP && version == 4)
         fn = "/proc/net/icmp";
     else if (protocol == IPPROTO_ICMPV6 && version == 6)
         fn = "/proc/net/icmp6";
     else if (protocol == IPPROTO_TCP)
         fn = (version == 4 ? "/proc/net/tcp" : "/proc/net/tcp6");
-    else */if (protocol == IPPROTO_UDP)
+    else if (protocol == IPPROTO_UDP)
         fn = (version == 4 ? "/proc/net/udp" : "/proc/net/udp6");
     else
         return uid;
