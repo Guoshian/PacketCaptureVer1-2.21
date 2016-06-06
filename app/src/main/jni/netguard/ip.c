@@ -115,7 +115,7 @@ int is_lower_layer(int protocol) {
 int is_upper_layer(int protocol) {
     return (protocol == IPPROTO_TCP ||
             protocol == IPPROTO_UDP ||
-            protocol == IPPROTO_ICMP ||
+            /*protocol == IPPROTO_ICMP ||*/
             protocol == IPPROTO_ICMPV6);
 }
 
@@ -221,7 +221,7 @@ void handle_ip(const struct arguments *args,
     int syn = 0;
     uint16_t sport = 0;
     uint16_t dport = 0;
-    if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6) {
+   /* if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6) {
         if (length - (payload - pkt) < sizeof(struct icmp)) {
             log_android(ANDROID_LOG_WARN, "ICMP packet too short");
             return;
@@ -233,7 +233,7 @@ void handle_ip(const struct arguments *args,
         sport = ntohs(icmp->icmp_id);
         dport = ntohs(icmp->icmp_id);
 
-    } else if (protocol == IPPROTO_UDP) {
+    } else */if (protocol == IPPROTO_UDP) {
         if (length - (payload - pkt) < sizeof(struct udphdr)) {
             log_android(ANDROID_LOG_WARN, "UDP packet too short");
             return;
@@ -282,7 +282,7 @@ void handle_ip(const struct arguments *args,
 
     // Limit number of sessions
     if (sessions >= maxsessions) {
-        if ((protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6) ||
+        if (/*(protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6) ||*/
             (protocol == IPPROTO_UDP && !has_udp_session(args, pkt, payload)) ||
             (protocol == IPPROTO_TCP && syn)) {
             log_android(ANDROID_LOG_ERROR,
@@ -294,7 +294,7 @@ void handle_ip(const struct arguments *args,
 
     // Get uid
     jint uid = -1;
-    if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6 ||
+    if (/*protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6 ||*/
         (protocol == IPPROTO_UDP && !has_udp_session(args, pkt, payload)) ||
         (protocol == IPPROTO_TCP && syn))
         uid = get_uid_retry(version, protocol, saddr, sport);
@@ -329,9 +329,9 @@ void handle_ip(const struct arguments *args,
 
     // Handle allowed traffic
     if (allowed) {
-        if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6)
+        /*if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6)
             handle_icmp(args, pkt, length, payload, uid);
-        else if (protocol == IPPROTO_UDP)
+        else */if (protocol == IPPROTO_UDP)
             handle_udp(args, pkt, length, payload, uid, redirect);
         else if (protocol == IPPROTO_TCP)
             handle_tcp(args, pkt, length, payload, uid, redirect);
@@ -411,11 +411,11 @@ jint get_uid(const int version, const int protocol,
 
     // Get proc file name
     char *fn = NULL;
-    if (protocol == IPPROTO_ICMP && version == 4)
+    /*if (protocol == IPPROTO_ICMP && version == 4)
         fn = "/proc/net/icmp";
     else if (protocol == IPPROTO_ICMPV6 && version == 6)
         fn = "/proc/net/icmp6";
-    else if (protocol == IPPROTO_TCP)
+    else */if (protocol == IPPROTO_TCP)
         fn = (version == 4 ? "/proc/net/tcp" : "/proc/net/tcp6");
     else if (protocol == IPPROTO_UDP)
         fn = (version == 4 ? "/proc/net/udp" : "/proc/net/udp6");
