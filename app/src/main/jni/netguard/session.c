@@ -93,20 +93,20 @@ void *handle_events(void *a) {
         log_android(ANDROID_LOG_DEBUG, "Loop thread %x", thread_id);
 
         // Count sessions
-        int isessions = get_icmp_sessions();
+       // int isessions = get_icmp_sessions();
         int usessions = get_udp_sessions();
         int tsessions = get_tcp_sessions();
-        int sessions = isessions + usessions + tsessions;
+        int sessions = /*isessions + */usessions + tsessions;
 
         // Check sessions
-        check_icmp_sessions(args, sessions, maxsessions);
+        //check_icmp_sessions(args, sessions, maxsessions);
         check_udp_sessions(args, sessions, maxsessions);
         check_tcp_sessions(args, sessions, maxsessions);
 
         // https://bugzilla.mozilla.org/show_bug.cgi?id=1093893
         int idle = (tsessions + usessions + tsessions == 0 && sdk >= 16);
-        log_android(ANDROID_LOG_DEBUG, "sessions ICMP %d UDP %d TCP %d max %d/%d idle %d sdk %d",
-                    isessions, usessions, tsessions, sessions, maxsessions, idle, sdk);
+        //log_android(ANDROID_LOG_DEBUG, "sessions ICMP %d UDP %d TCP %d max %d/%d idle %d sdk %d",
+        //            isessions, usessions, tsessions, sessions, maxsessions, idle, sdk);
 
         // Next event time
         ts.tv_sec = (sdk < 16 ? 5 : get_select_timeout(sessions, maxsessions));
@@ -193,7 +193,7 @@ void *handle_events(void *a) {
 #endif
 
                 // Check ICMP downstream
-                check_icmp_sockets(args, &ready, &rfds, &wfds, &efds);
+                //check_icmp_sockets(args, &ready, &rfds, &wfds, &efds);
 
                 // Check UDP downstream
                 check_udp_sockets(args, &ready, &rfds, &wfds, &efds);
@@ -240,7 +240,7 @@ int get_select_timeout(int sessions, int maxsessions) {
     time_t now = time(NULL);
     int timeout = SELECT_TIMEOUT;
 
-    struct icmp_session *i = icmp_session;
+    /*struct icmp_session *i = icmp_session;
     while (i != NULL) {
         if (!i->stop) {
             int stimeout = i->time + get_icmp_timeout(i, sessions, maxsessions) - now + 1;
@@ -248,7 +248,7 @@ int get_select_timeout(int sessions, int maxsessions) {
                 timeout = stimeout;
         }
         i = i->next;
-    }
+    }*/
 
     struct udp_session *u = udp_session;
     while (u != NULL) {
@@ -287,7 +287,7 @@ int get_selects(const struct arguments *args, fd_set *rfds, fd_set *wfds, fd_set
     int max = args->tun;
 
     // Select ICMP sockets
-    struct icmp_session *i = icmp_session;
+   /* struct icmp_session *i = icmp_session;
     while (i != NULL) {
         if (!i->stop) {
             if (fstat(i->socket, &sb) < 0) {
@@ -302,7 +302,7 @@ int get_selects(const struct arguments *args, fd_set *rfds, fd_set *wfds, fd_set
             }
         }
         i = i->next;
-    }
+    }*/
 
     // Select UDP sockets
     struct udp_session *u = udp_session;
@@ -372,7 +372,7 @@ void check_allowed(const struct arguments *args) {
     char source[INET6_ADDRSTRLEN + 1];
     char dest[INET6_ADDRSTRLEN + 1];
 
-    struct icmp_session *i = icmp_session;
+    /*struct icmp_session *i = icmp_session;
     while (i != NULL) {
         if (!i->stop) {
             if (i->version == 4) {
@@ -393,7 +393,7 @@ void check_allowed(const struct arguments *args) {
             }
         }
         i = i->next;
-    }
+    }*/
 
     struct udp_session *l = NULL;
     struct udp_session *u = udp_session;

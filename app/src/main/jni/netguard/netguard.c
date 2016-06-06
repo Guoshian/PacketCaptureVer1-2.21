@@ -192,29 +192,29 @@ Java_eu_faircode_netguard_ServiceSinkhole_jni_1get_1stats(JNIEnv *env, jobject i
     if (pthread_mutex_lock(&lock))
         log_android(ANDROID_LOG_ERROR, "pthread_mutex_lock failed");
 
-    jintArray jarray = (*env)->NewIntArray(env, 5);
+    jintArray jarray = (*env)->NewIntArray(env, 4);
     jint *jcount = (*env)->GetIntArrayElements(env, jarray, NULL);
-    jcount[0] = get_icmp_sessions();
-    jcount[1] = get_udp_sessions();
-    jcount[2] = get_tcp_sessions();
+   // jcount[0] = get_icmp_sessions();
+    jcount[0] = get_udp_sessions();
+    jcount[1] = get_tcp_sessions();
 
     if (pthread_mutex_unlock(&lock))
         log_android(ANDROID_LOG_ERROR, "pthread_mutex_unlock failed");
 
-    jcount[3] = 0;
+    jcount[2] = 0;
     DIR *d = opendir("/proc/self/fd");
     if (d) {
         struct dirent *dir;
         while ((dir = readdir(d)) != NULL)
             if (dir->d_type != DT_DIR)
-                jcount[3]++;
+                jcount[2]++;
         closedir(d);
     }
 
     struct rlimit rlim;
     memset(&rlim, 0, sizeof(struct rlimit));
     getrlimit(RLIMIT_NOFILE, &rlim);
-    jcount[4] = (jint) rlim.rlim_cur;
+    jcount[3] = (jint) rlim.rlim_cur;
 
     (*env)->ReleaseIntArrayElements(env, jarray, jcount, NULL);
     return jarray;
