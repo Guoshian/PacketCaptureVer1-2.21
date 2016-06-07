@@ -38,7 +38,7 @@ int check_tun(const struct arguments *args, int *ready,
               fd_set *rfds, fd_set *wfds, fd_set *efds,
               int sessions, int maxsessions) {
     // Check tun error
-    if (FD_ISSET(args->tun, efds)) {
+    /*if (FD_ISSET(args->tun, efds)) {
         (*ready)--;
         log_android(ANDROID_LOG_ERROR, "tun %d exception", args->tun);
         if (fcntl(args->tun, F_GETFL) < 0) {
@@ -49,7 +49,7 @@ int check_tun(const struct arguments *args, int *ready,
         } else
             report_exit(args, "tun %d exception", args->tun);
         return -1;
-    }
+    }*/
 
     // Check tun read
     if (FD_ISSET(args->tun, rfds)) {
