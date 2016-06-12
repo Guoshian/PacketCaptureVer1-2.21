@@ -657,7 +657,7 @@ jobject create_packet(const struct arguments *args,
                       const char *dest,
                       jint dport,
                       const char *data,
-                      jint uid,
+                      /*jint uid,*/
                       jboolean allowed) {
     JNIEnv *env = args->env;
 
@@ -710,7 +710,7 @@ jobject create_packet(const struct arguments *args,
     (*env)->SetObjectField(env, jpacket, fidDaddr, jdest);
     (*env)->SetIntField(env, jpacket, fidDport, dport);
     (*env)->SetObjectField(env, jpacket, fidData, jdata);
-    (*env)->SetIntField(env, jpacket, fidUid, uid);
+    //(*env)->SetIntField(env, jpacket, fidUid, uid);
     (*env)->SetBooleanField(env, jpacket, fidAllowed, allowed);
 
     (*env)->DeleteLocalRef(env, jdata);
@@ -737,12 +737,12 @@ jfieldID fidUsageVersion = NULL;
 jfieldID fidUsageProtocol = NULL;
 jfieldID fidUsageDAddr = NULL;
 jfieldID fidUsageDPort = NULL;
-jfieldID fidUsageUid = NULL;
+//jfieldID fidUsageUid = NULL;
 jfieldID fidUsageSent = NULL;
 jfieldID fidUsageReceived = NULL;
 
 void account_usage(const struct arguments *args, jint version, jint protocol,
-                   const char *daddr, jint dport, jint uid, jlong sent, jlong received) {
+                   const char *daddr, jint dport, /*jint uid,*/ jlong sent, jlong received) {
 #ifdef PROFILE_JNI
     float mselapsed;
     struct timeval start, end;
@@ -768,7 +768,7 @@ void account_usage(const struct arguments *args, jint version, jint protocol,
         fidUsageProtocol = jniGetFieldID(args->env, clsUsage, "Protocol", "I");
         fidUsageDAddr = jniGetFieldID(args->env, clsUsage, "DAddr", string);
         fidUsageDPort = jniGetFieldID(args->env, clsUsage, "DPort", "I");
-        fidUsageUid = jniGetFieldID(args->env, clsUsage, "Uid", "I");
+        //fidUsageUid = jniGetFieldID(args->env, clsUsage, "Uid", "I");
         fidUsageSent = jniGetFieldID(args->env, clsUsage, "Sent", "J");
         fidUsageReceived = jniGetFieldID(args->env, clsUsage, "Received", "J");
     }
@@ -781,7 +781,7 @@ void account_usage(const struct arguments *args, jint version, jint protocol,
     (*args->env)->SetIntField(args->env, jusage, fidUsageProtocol, protocol);
     (*args->env)->SetObjectField(args->env, jusage, fidUsageDAddr, jdaddr);
     (*args->env)->SetIntField(args->env, jusage, fidUsageDPort, dport);
-    (*args->env)->SetIntField(args->env, jusage, fidUsageUid, uid);
+    //(*args->env)->SetIntField(args->env, jusage, fidUsageUid, uid);
     (*args->env)->SetLongField(args->env, jusage, fidUsageSent, sent);
     (*args->env)->SetLongField(args->env, jusage, fidUsageReceived, received);
 

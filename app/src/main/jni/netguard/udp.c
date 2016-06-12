@@ -101,7 +101,7 @@ void check_udp_sessions(const struct arguments *args, int sessions, int maxsessi
 
         if (u->state == UDP_CLOSED && (u->sent || u->received)) {
             account_usage(args, u->version, IPPROTO_UDP,
-                          dest, ntohs(u->dest), u->uid, u->sent, u->received);
+                          dest, ntohs(u->dest), /*u->uid,*/ u->sent, u->received);
             u->sent = 0;
             u->received = 0;
         }
@@ -237,8 +237,8 @@ int has_udp_session(const struct arguments *args, const uint8_t *pkt, const uint
 
 void block_udp(const struct arguments *args,
                const uint8_t *pkt, size_t length,
-               const uint8_t *payload,
-               int uid) {
+               const uint8_t *payload/*,
+               int uid*/) {
     // Get headers
     const uint8_t version = (*pkt) >> 4;
     const struct iphdr *ip4 = (struct iphdr *) pkt;
@@ -261,7 +261,7 @@ void block_udp(const struct arguments *args,
     // Register session
     struct udp_session *u = malloc(sizeof(struct udp_session));
     u->time = time(NULL);
-    u->uid = uid;
+    //u->uid = uid;
     u->version = version;
 
     if (version == 4) {
@@ -284,7 +284,7 @@ void block_udp(const struct arguments *args,
 jboolean handle_udp(const struct arguments *args,
                     const uint8_t *pkt, size_t length,
                     const uint8_t *payload,
-                    int uid, struct allowed *redirect) {
+                    /*int uid,*/ struct allowed *redirect) {
     // Get headers
     const uint8_t version = (*pkt) >> 4;
     const struct iphdr *ip4 = (struct iphdr *) pkt;
@@ -328,7 +328,7 @@ jboolean handle_udp(const struct arguments *args,
         // Register session
         struct udp_session *u = malloc(sizeof(struct udp_session));
         u->time = time(NULL);
-        u->uid = uid;
+        //u->uid = uid;
         u->version = version;
 
         int rversion;
@@ -386,7 +386,7 @@ jboolean handle_udp(const struct arguments *args,
                 jobject objPacket = create_packet(
                         args, version, IPPROTO_UDP, "",
                         source, ntohs(cur->source), dest, ntohs(cur->dest),
-                        name, 0, 0);
+                        name, /*0,*/ 0);
                 log_packet(args, objPacket);
 
                 // Session done

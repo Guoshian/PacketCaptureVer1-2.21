@@ -368,13 +368,13 @@ int has_udp_session(const struct arguments *args, const uint8_t *pkt, const uint
 
 void block_udp(const struct arguments *args,
                const uint8_t *pkt, size_t length,
-               const uint8_t *payload,
-               int uid);
+               const uint8_t *payload/*,
+               int uid*/);
 
 jboolean handle_udp(const struct arguments *args,
                     const uint8_t *pkt, size_t length,
                     const uint8_t *payload,
-                    int uid, struct allowed *redirect);
+                    /*int uid,*/ struct allowed *redirect);
 
 int get_dns_query(const struct arguments *args, const struct udp_session *u,
                   const uint8_t *data, const size_t datalen,
@@ -398,7 +398,7 @@ int get_tcp_sessions();
 jboolean handle_tcp(const struct arguments *args,
                     const uint8_t *pkt, size_t length,
                     const uint8_t *payload,
-                    int uid, struct allowed *redirect);
+                    /*int uid,*/ struct allowed *redirect);
 
 void queue_tcp(const struct arguments *args,
                const struct tcphdr *tcphdr,
@@ -485,11 +485,11 @@ jobject create_packet(const struct arguments *args,
                       const char *dest,
                       jint dport,
                       const char *data,
-                      jint uid,
+                      /*jint uid,*/
                       jboolean allowed);
 
 void account_usage(const struct arguments *args, jint version, jint protocol,
-                   const char *daddr, jint dport, jint uid, jlong sent, jlong received);
+                   const char *daddr, jint dport, /*jint uid,*/ jlong sent, jlong received);
 
 void write_pcap_hdr();
 

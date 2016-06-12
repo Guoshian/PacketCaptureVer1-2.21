@@ -293,15 +293,15 @@ void handle_ip(const struct arguments *args,
     }
 
     // Get uid
-    jint uid = -1;
-    if (/*protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6 ||*/
-        (protocol == IPPROTO_UDP && !has_udp_session(args, pkt, payload)) ||
-        (protocol == IPPROTO_TCP && syn))
-        uid = get_uid_retry(version, protocol, saddr, sport);
+   // jint uid = -1;
+    //if (/*protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6 ||*/
+    //    (protocol == IPPROTO_UDP && !has_udp_session(args, pkt, payload)) ||
+     //   (protocol == IPPROTO_TCP && syn))
+        //uid = get_uid_retry(version, protocol, saddr, sport);
 
-    log_android(ANDROID_LOG_DEBUG,
-                "Packet v%d %s/%u > %s/%u proto %d flags %s uid %d",
-                version, source, sport, dest, dport, protocol, flags, uid);
+    //log_android(ANDROID_LOG_DEBUG,
+    //            "Packet v%d %s/%u > %s/%u proto %d flags %s uid %d",
+    //            version, source, sport, dest, dport, protocol, flags, uid);
 
 #ifdef PROFILE_EVENTS
     gettimeofday(&end, NULL);
@@ -320,7 +320,7 @@ void handle_ip(const struct arguments *args,
         allowed = 1; // assume existing session
     else {
         jobject objPacket = create_packet(
-                args, version, protocol, flags, source, sport, dest, dport, "", uid, 0);
+                args, version, protocol, flags, source, sport, dest, dport, "", /*uid,*/ 0);
         redirect = is_address_allowed(args, objPacket);
         allowed = (redirect != NULL);
         if (redirect != NULL && (*redirect->raddr == 0 || redirect->rport == 0))
@@ -332,13 +332,13 @@ void handle_ip(const struct arguments *args,
         /*if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6)
             handle_icmp(args, pkt, length, payload, uid);
         else */if (protocol == IPPROTO_UDP)
-            handle_udp(args, pkt, length, payload, uid, redirect);
+            handle_udp(args, pkt, length, payload, /*uid,*/ redirect);
         else if (protocol == IPPROTO_TCP)
-            handle_tcp(args, pkt, length, payload, uid, redirect);
+            handle_tcp(args, pkt, length, payload, /*uid,*/ redirect);
     }
     else {
         if (protocol == IPPROTO_UDP)
-            block_udp(args, pkt, length, payload, uid);
+            block_udp(args, pkt, length, payload/*, uid*/);
         log_android(ANDROID_LOG_WARN, "Address v%d p%d %s/%u syn %d not allowed",
                     version, protocol, dest, dport, syn);
     }
@@ -354,11 +354,11 @@ void handle_ip(const struct arguments *args,
 
 jint get_uid_retry(const int version, const int protocol,
                    const void *saddr, const uint16_t sport) {
-    char source[INET6_ADDRSTRLEN + 1];
+   /* char source[INET6_ADDRSTRLEN + 1];
     inet_ntop(version == 4 ? AF_INET : AF_INET6, saddr, source, sizeof(source));
     log_android(ANDROID_LOG_INFO, "get uid v%d p%d %s/%u", version, protocol, source, sport);
 
-    jint uid = -1;
+    jint fidUsageUid = -1;
     int tries = 0;
     usleep(1000 * UID_DELAY);
     while (uid < 0 && tries++ < UID_MAXTRY) {
@@ -387,7 +387,7 @@ jint get_uid_retry(const int version, const int protocol,
         log_android(ANDROID_LOG_ERROR, "uid v%d p%d %s/%u not found",
                     version, protocol, source, sport);
 
-    return uid;
+    return uid;*/
 }
 
 jint get_uid(const int version, const int protocol,

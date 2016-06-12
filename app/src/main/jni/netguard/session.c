@@ -410,15 +410,15 @@ void check_allowed(const struct arguments *args) {
 
             jobject objPacket = create_packet(
                     args, u->version, IPPROTO_UDP, "",
-                    source, ntohs(u->source), dest, ntohs(u->dest), "", u->uid, 0);
+                    source, ntohs(u->source), dest, ntohs(u->dest), "", /*u->uid,*/ 0);
             if (is_address_allowed(args, objPacket) == NULL) {
                 u->state = UDP_FINISHING;
-                log_android(ANDROID_LOG_WARN, "UDP terminate session socket %d uid %d",
-                            u->socket, u->uid);
+               /* log_android(ANDROID_LOG_WARN, "UDP terminate session socket %d uid %d",
+                            u->socket, u->uid);*/
             }
         }
         else if (u->state == UDP_BLOCKED) {
-            log_android(ANDROID_LOG_WARN, "UDP remove blocked session uid %d", u->uid);
+            /*log_android(ANDROID_LOG_WARN, "UDP remove blocked session uid %d", u->uid);*/
 
             if (l == NULL)
                 udp_session = u->next;
@@ -448,11 +448,11 @@ void check_allowed(const struct arguments *args) {
 
             jobject objPacket = create_packet(
                     args, t->version, IPPROTO_TCP, "",
-                    source, ntohs(t->source), dest, ntohs(t->dest), "", t->uid, 0);
+                    source, ntohs(t->source), dest, ntohs(t->dest), "", /*t->uid,*/ 0);
             if (is_address_allowed(args, objPacket) == NULL) {
                 write_rst(args, t);
-                log_android(ANDROID_LOG_WARN, "TCP terminate socket %d uid %d",
-                            t->socket, t->uid);
+                /*log_android(ANDROID_LOG_WARN, "TCP terminate socket %d uid %d",
+                            t->socket, t->uid);*/
             }
         }
         t = t->next;

@@ -126,7 +126,7 @@ void check_tcp_sessions(const struct arguments *args, int sessions, int maxsessi
 
         if ((t->state == TCP_CLOSING || t->state == TCP_CLOSE) && (t->sent || t->received)) {
             account_usage(args, t->version, IPPROTO_TCP,
-                          dest, ntohs(t->dest), t->uid, t->sent, t->received);
+                          dest, ntohs(t->dest), /*t->uid,*/ t->sent, t->received);
             t->sent = 0;
             t->received = 0;
         }
@@ -428,7 +428,7 @@ void check_tcp_sockets(const struct arguments *args, int *ready,
 jboolean handle_tcp(const struct arguments *args,
                     const uint8_t *pkt, size_t length,
                     const uint8_t *payload,
-                    int uid, struct allowed *redirect) {
+                    /*int uid, */struct allowed *redirect) {
     // Get headers
     const uint8_t version = (*pkt) >> 4;
     const struct iphdr *ip4 = (struct iphdr *) pkt;
@@ -485,7 +485,7 @@ jboolean handle_tcp(const struct arguments *args,
             dest, ntohs(tcphdr->dest),
             ntohl(tcphdr->seq) - (cur == NULL ? 0 : cur->remote_start),
             tcphdr->ack ? ntohl(tcphdr->ack_seq) - (cur == NULL ? 0 : cur->local_start) : 0,
-            datalen, ntohs(tcphdr->window), uid);
+            datalen, ntohs(tcphdr->window)/*, uid*/);
     log_android(tcphdr->urg ? ANDROID_LOG_WARN : ANDROID_LOG_DEBUG, packet);
 
     // Check session
@@ -525,7 +525,7 @@ jboolean handle_tcp(const struct arguments *args,
             // Register session
             struct tcp_session *syn = malloc(sizeof(struct tcp_session));
             syn->time = time(NULL);
-            syn->uid = uid;
+            //syn->uid = uid;
             syn->version = version;
             syn->mss = mss;
             syn->recv_scale = ws;
