@@ -840,9 +840,9 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 startActivityForResult(getIntentInvite(this), REQUEST_INVITE);
                 return true;
 
-            case R.id.menu_legend:
+            /*case R.id.menu_legend:
                 menu_legend();
-                return true;
+                return true;*/
 
             /*case R.id.menu_support:
                 startActivity(getIntentSupport());
@@ -857,7 +857,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    private void menu_legend() {
+    /*private void menu_legend() {
         TypedValue tv = new TypedValue();
         getTheme().resolveAttribute(R.attr.colorOn, tv, true);
         int colorOn = tv.data;
@@ -905,7 +905,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 })
                 .create();
         dialogLegend.show();
-    }
+    }*/
 
     /*private void menu_about() {
         // Create view
