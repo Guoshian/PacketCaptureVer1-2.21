@@ -487,12 +487,12 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                 }.execute();
                 return true;
 
-            case R.id.menu_log_support:
+            /*case R.id.menu_log_support:
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse("https://github.com/M66B/NetGuard/blob/master/FAQ.md#FAQ27"));
                 if (getPackageManager().resolveActivity(intent, 0) != null)
                     startActivity(intent);
-                return true;
+                return true;*/
 
             default:
                 return super.onOptionsItemSelected(item);

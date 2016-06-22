@@ -65,9 +65,9 @@
     <item
         android:id="@+id/menu_legend"
         android:title="@string/menu_legend" />
-    <item
+    <!--<item
         android:id="@+id/menu_support"
-        android:title="@string/menu_support" />
+        android:title="@string/menu_support" />-->
     <!--<item
         android:id="@+id/menu_about"
         android:title="@string/menu_about" />-->

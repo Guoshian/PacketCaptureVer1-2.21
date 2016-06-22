@@ -746,8 +746,8 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         if (!Util.hasValidFingerprint(this) || getIntentInvite(this).resolveActivity(getPackageManager()) == null)
             menu.removeItem(R.id.menu_invite);
 
-        if (getIntentSupport().resolveActivity(getPackageManager()) == null)
-            menu.removeItem(R.id.menu_support);
+        /*if (getIntentSupport().resolveActivity(getPackageManager()) == null)
+            menu.removeItem(R.id.menu_support);*/
 
         return true;
     }
@@ -844,9 +844,9 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 menu_legend();
                 return true;
 
-            case R.id.menu_support:
+            /*case R.id.menu_support:
                 startActivity(getIntentSupport());
-                return true;
+                return true;*/
 
             /*case R.id.menu_about:
                 menu_about();
@@ -988,11 +988,11 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         return intent;
     }
 
-    private static Intent getIntentSupport() {
+    /*private static Intent getIntentSupport() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("https://github.com/M66B/NetGuard/blob/master/FAQ.md"));
         return intent;
-    }
+    }*/
 
     private Intent getIntentLogcat() {
         Intent intent;
