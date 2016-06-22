@@ -193,8 +193,9 @@ Your internet traffic is not being sent to a remote VPN server.</string>
   <string name="title_dontask">Don\'t ask again</string>
   <string name="title_log_whois">Whois %1$s</string>
   <string name="title_log_port">Port %1$d</string>
+
   <string name="title_pro">專業版功能</string>
-  <string name="title_pro_description">The following pro features are available:</string>
+  <!--<string name="title_pro_description">The following pro features are available:</string>
   <string name="title_pro_log">檢視阻擋流量紀錄</string>
   <string name="title_pro_filter">Filter network traffic</string>
   <string name="title_pro_notify">新App通知</string>
@@ -204,7 +205,8 @@ Your internet traffic is not being sent to a remote VPN server.</string>
   <string name="title_pro_buy">詳細資訊</string>
   <string name="title_pro_bought">啟用</string>
   <string name="title_pro_challenge">驗證密碼</string>
-  <string name="title_pro_reponse">回答</string>
+  <string name="title_pro_reponse">回答</string>-->
+
   <string-array name="themeNames">
     <item>藍綠 / 橙</item>
     <item>藍 / 橙</item>

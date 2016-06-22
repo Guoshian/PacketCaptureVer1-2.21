@@ -216,7 +216,7 @@ Your internet traffic is not being sent to a remote VPN server.</string>
     <string name="title_log_port">Port %1$d</string>
 
     <string name="title_pro">Pro features</string>
-    <string name="title_pro_description">The following pro features are available:</string>
+    <!--<string name="title_pro_description">The following pro features are available:</string>
     <string name="title_pro_log">View blocked traffic log</string>
     <string name="title_pro_filter">Filter network traffic</string>
     <string name="title_pro_notify">New application notifications</string>
@@ -226,7 +226,7 @@ Your internet traffic is not being sent to a remote VPN server.</string>
     <string name="title_pro_buy">Details</string>
     <string name="title_pro_bought">Enabled</string>
     <string name="title_pro_challenge">Challenge</string>
-    <string name="title_pro_reponse">Response</string>
+    <string name="title_pro_reponse">Response</string>-->
 
     <string-array name="themeNames">
         <item>teal/orange</item>

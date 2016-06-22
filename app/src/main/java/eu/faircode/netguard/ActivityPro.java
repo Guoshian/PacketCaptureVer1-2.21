@@ -41,7 +41,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ActivityPro extends AppCompatActivity {
-    private static final String TAG = "NetGuard.Pro";
+    /*private static final String TAG = "NetGuard.Pro";
 
     private IAB iab;
 
@@ -273,5 +273,5 @@ public class ActivityPro extends AppCompatActivity {
         llChallenge.setVisibility(
                 IAB.isPurchased(SKU_DONATION, this) || Util.isPlayStoreInstall(this)
                         ? View.GONE : View.VISIBLE);
-    }
+    }*/
 }

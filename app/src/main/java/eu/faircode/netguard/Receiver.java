@@ -50,7 +50,7 @@ public class Receiver extends BroadcastReceiver {
             // Application added
             if (!intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
                 // Show notification
-                if (IAB.isPurchased(ActivityPro.SKU_NOTIFY, context) && prefs.getBoolean("install", true)) {
+                if (/*IAB.isPurchased(ActivityPro.SKU_NOTIFY, context) && */prefs.getBoolean("install", true)) {
                     int uid = intent.getIntExtra(Intent.EXTRA_UID, -1);
                     notifyNewApplication(uid, context);
                 }

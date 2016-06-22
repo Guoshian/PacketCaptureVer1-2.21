@@ -450,21 +450,21 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
     public void onSharedPreferenceChanged(SharedPreferences prefs, String name) {
         // Pro features
         if ("theme".equals(name)) {
-            if (!"teal".equals(prefs.getString(name, "teal")) && !IAB.isPurchased(ActivityPro.SKU_THEME, this)) {
+            if (!"teal".equals(prefs.getString(name, "teal")) /*&& !IAB.isPurchased(ActivityPro.SKU_THEME, this)*/) {
                 prefs.edit().putString(name, "teal").apply();
                 ((ListPreference) getPreferenceScreen().findPreference(name)).setValue("teal");
                 startActivity(new Intent(this, ActivityPro.class));
                 return;
             }
         } else if ("show_stats".equals(name)) {
-            if (prefs.getBoolean(name, false) && !IAB.isPurchased(ActivityPro.SKU_SPEED, this)) {
+            if (prefs.getBoolean(name, false) /*&& !IAB.isPurchased(ActivityPro.SKU_SPEED, this)*/) {
                 prefs.edit().putBoolean(name, false).apply();
                 ((TwoStatePreference) getPreferenceScreen().findPreference(name)).setChecked(false);
                 startActivity(new Intent(this, ActivityPro.class));
                 return;
             }
         } else if ("install".equals(name)) {
-            if (prefs.getBoolean(name, false) && !IAB.isPurchased(ActivityPro.SKU_NOTIFY, this)) {
+            if (prefs.getBoolean(name, false) /*&& !IAB.isPurchased(ActivityPro.SKU_NOTIFY, this)*/) {
                 prefs.edit().putBoolean(name, false).apply();
                 ((TwoStatePreference) getPreferenceScreen().findPreference(name)).setChecked(false);
                 startActivity(new Intent(this, ActivityPro.class));
@@ -1273,7 +1273,7 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
                     else {
                         if (current == application) {
                             // Pro features
-                            if ("log".equals(key)) {
+                            /*if ("log".equals(key)) {
                                 if (!IAB.isPurchased(ActivityPro.SKU_LOG, context))
                                     return;
                             } else if ("theme".equals(key)) {
@@ -1282,7 +1282,7 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
                             } else if ("show_stats".equals(key)) {
                                 if (!IAB.isPurchased(ActivityPro.SKU_SPEED, context))
                                     return;
-                            }
+                            }*/
 
                             if ("hosts_last_import".equals(key) || "hosts_last_download".equals(key))
                                 return;

@@ -244,7 +244,7 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                                 startActivity(lookupPort);
                                 return true;
 
-                            case R.id.menu_allow:
+                            /*case R.id.menu_allow:
                                 if (IAB.isPurchased(ActivityPro.SKU_FILTER, ActivityLog.this)) {
                                     DatabaseHelper.getInstance(ActivityLog.this).updateAccess(packet, dname, 0);
                                     ServiceSinkhole.reload("allow host", ActivityLog.this);
@@ -253,9 +253,9 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                                     startActivity(main);
                                 } else
                                     startActivity(new Intent(ActivityLog.this, ActivityPro.class));
-                                return true;
+                                return true;*/
 
-                            case R.id.menu_block:
+                            /*case R.id.menu_block:
                                 if (IAB.isPurchased(ActivityPro.SKU_FILTER, ActivityLog.this)) {
                                     DatabaseHelper.getInstance(ActivityLog.this).updateAccess(packet, dname, 1);
                                     ServiceSinkhole.reload("block host", ActivityLog.this);
@@ -264,7 +264,7 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                                     startActivity(main);
                                 } else
                                     startActivity(new Intent(ActivityLog.this, ActivityPro.class));
-                                return true;
+                                return true;*/
 
                             default:
                                 return false;

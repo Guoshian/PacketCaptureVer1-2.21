@@ -569,18 +569,18 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> im
                                         return true;
 
                                     case R.id.menu_allow:
-                                        if (IAB.isPurchased(ActivityPro.SKU_FILTER, context)) {
+                                        /*if (IAB.isPurchased(ActivityPro.SKU_FILTER, context)) {
                                             DatabaseHelper.getInstance(context).setAccess(id, 0);
                                             ServiceSinkhole.reload("allow host", context);
-                                        } else
+                                        } else*/
                                             context.startActivity(new Intent(context, ActivityPro.class));
                                         return true;
 
                                     case R.id.menu_block:
-                                        if (IAB.isPurchased(ActivityPro.SKU_FILTER, context)) {
+                                        /*if (IAB.isPurchased(ActivityPro.SKU_FILTER, context)) {
                                             DatabaseHelper.getInstance(context).setAccess(id, 1);
                                             ServiceSinkhole.reload("block host", context);
-                                        } else
+                                        } else*/
                                             context.startActivity(new Intent(context, ActivityPro.class));
                                         return true;
 

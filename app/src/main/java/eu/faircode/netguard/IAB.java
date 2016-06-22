@@ -121,8 +121,8 @@ public class IAB implements ServiceConnection {
         SharedPreferences prefs = context.getSharedPreferences("IAB", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         for (String product : prefs.getAll().keySet())
-            if (!ActivityPro.SKU_DONATION.equals(product))
-                editor.remove(product);
+            /*if (!ActivityPro.SKU_DONATION.equals(product))
+                editor.remove(product);*/
         for (String sku : skus) {
             Log.i(TAG, "SKU=" + sku);
             editor.putBoolean(sku, true);
@@ -173,9 +173,9 @@ public class IAB implements ServiceConnection {
         if (Util.isDebuggable(context) || Util.getSelfVersionName(context).contains("beta"))
             return true;
         SharedPreferences prefs = context.getSharedPreferences("IAB", Context.MODE_PRIVATE);
-        return (prefs.getBoolean(sku, false) ||
+        return (prefs.getBoolean(sku, false) /*||
                 prefs.getBoolean(ActivityPro.SKU_PRO1, false) ||
-                prefs.getBoolean(ActivityPro.SKU_DONATION, false));
+                prefs.getBoolean(ActivityPro.SKU_DONATION, false)*/);
     }
 
     public static String getResult(int responseCode) {
