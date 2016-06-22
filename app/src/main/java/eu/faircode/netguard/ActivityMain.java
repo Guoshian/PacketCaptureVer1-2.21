@@ -836,9 +836,9 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 startActivity(new Intent(ActivityMain.this, ActivityPro.class));
                 return true;
 
-            case R.id.menu_invite:
+            /*case R.id.menu_invite:
                 startActivityForResult(getIntentInvite(this), REQUEST_INVITE);
-                return true;
+                return true;*/
 
             /*case R.id.menu_legend:
                 menu_legend();
@@ -981,12 +981,12 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         return intent;
     }
 
-    private static Intent getIntentRate(Context context) {
+    /*private static Intent getIntentRate(Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName()));
         if (intent.resolveActivity(context.getPackageManager()) == null)
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName()));
         return intent;
-    }
+    }*/
 
     /*private static Intent getIntentSupport() {
         Intent intent = new Intent(Intent.ACTION_VIEW);

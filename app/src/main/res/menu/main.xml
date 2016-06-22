@@ -59,9 +59,9 @@
     <item
         android:id="@+id/menu_pro"
         android:title="@string/title_pro" />
-    <item
+    <!--<item
         android:id="@+id/menu_invite"
-        android:title="@string/menu_invite" />
+        android:title="@string/menu_invite" />-->
     <!--<item
         android:id="@+id/menu_legend"
         android:title="@string/menu_legend" />-->
