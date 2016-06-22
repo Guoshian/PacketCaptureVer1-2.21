@@ -743,8 +743,8 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             }
         });
 
-        if (!Util.hasValidFingerprint(this) || getIntentInvite(this).resolveActivity(getPackageManager()) == null)
-            menu.removeItem(R.id.menu_invite);
+        //if (!Util.hasValidFingerprint(this) || getIntentInvite(this).resolveActivity(getPackageManager()) == null)
+            //menu.removeItem(R.id.menu_invite);
 
         /*if (getIntentSupport().resolveActivity(getPackageManager()) == null)
             menu.removeItem(R.id.menu_support);*/
@@ -971,7 +971,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         dialogAbout.show();
     }*/
 
-    private static Intent getIntentInvite(Context context) {
+    /*private static Intent getIntentInvite(Context context) {
         Intent intent = new Intent("com.google.android.gms.appinvite.ACTION_APP_INVITE");
         intent.setPackage("com.google.android.gms");
         intent.putExtra("com.google.android.gms.appinvite.TITLE", context.getString(R.string.menu_invite));
@@ -979,7 +979,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         intent.putExtra("com.google.android.gms.appinvite.BUTTON_TEXT", context.getString(R.string.msg_try));
         // com.google.android.gms.appinvite.DEEP_LINK_URL
         return intent;
-    }
+    }*/
 
     /*private static Intent getIntentRate(Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName()));
